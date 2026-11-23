@@ -7,10 +7,13 @@ from aiogram.filters import CommandStart
 from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton, WebAppInfo
 
 ROOT=Path(__file__).parent
-TOKEN="PASTE_BOT_TOKEN_HERE"
-BOT_USERNAME="PASTE_BOT_USERNAME_HERE"
-WEBAPP_URL="PASTE_HTTPS_URL_HERE"
-ADMIN_IDS={123456789}  # замени на свой Telegram ID
+
+TOKEN = os.getenv("TOKEN", "")
+BOT_USERNAME = os.getenv("BOT_USERNAME", "")
+WEBAPP_URL = os.getenv("WEBAPP_URL", "")
+ADMIN_IDS = {
+    int(x) for x in os.getenv("ADMIN_IDS", "").split(",") if x.strip()
+}  # замени на свой Telegram ID
 PORT=8080
 DB=str(ROOT/"neon_club.sqlite3")
 START_BONUS, REF_BONUS, DAILY_BONUS, QUIZ_REWARD=100,50,10,5
