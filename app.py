@@ -14,7 +14,7 @@ WEBAPP_URL = os.getenv("WEBAPP_URL", "")
 ADMIN_IDS = {
     int(x) for x in os.getenv("ADMIN_IDS", "").split(",") if x.strip()
 }  # замени на свой Telegram ID
-PORT=8080
+PORT=int(os.getenv("PORT", "8080"))
 DB=str(ROOT/"neon_club.sqlite3")
 START_BONUS, REF_BONUS, DAILY_BONUS, QUIZ_REWARD=100,50,10,5
 QUESTIONS=[
@@ -109,8 +109,10 @@ async def answer(r):
 async def admin_users(r):
  u=auth(r)
  if not u or int(u["id"]) not in ADMIN_IDS:return web.json_response({"error":"Доступ запрещён"},status=403)
- with db() as c: rows=c.execute("SELECT id,name,balance FROM users ORDER BY joined DESC LIMIT 100").fetchall()
- return web.json_response({"users":[dict(x) for x in rows]})
+ with db() as c:
+  total=c.execute("SELECT count(*) n FROM users").fetchone()["n"]
+  rows=c.execute("SELECT id,username,name,balance,joined FROM users ORDER BY joined DESC LIMIT 200").fetchall()
+ return web.json_response({"total":total,"users":[dict(x) for x in rows]})
 async def adjust(r):
  u=auth(r)
  if not u or int(u["id"]) not in ADMIN_IDS:return web.json_response({"error":"Доступ запрещён"},status=403)
