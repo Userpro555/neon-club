@@ -68,7 +68,7 @@ async def me(r):
    x=U();x.id=uid;x.username=u.get("username","");x.first_name=u.get("first_name","");register(x)
    row=c.execute("SELECT * FROM users WHERE id=?",(uid,)).fetchone()
   refs=c.execute("SELECT count(*) n FROM users WHERE ref=?",(uid,)).fetchone()["n"]
- return web.json_response({"id":uid,"name":row["name"],"balance":row["balance"],"refs":refs,"admin":uid in ADMIN_IDS})
+ return web.json_response({"id":uid,"name":row["name"],"username":u.get("username",""),"photo_url":u.get("photo_url",""),"balance":row["balance"],"refs":refs,"admin":uid in ADMIN_IDS})
 async def referral(r):
  u=auth(r)
  if not u:return denied()
