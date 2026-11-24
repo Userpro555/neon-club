@@ -103,7 +103,7 @@ async def answer(r):
  except Exception:return web.json_response({"error":"Некорректный ответ"},status=400)
  with db() as c:
   if not c.execute("SELECT 1 FROM quiz WHERE user_id=? AND q=?",(uid,i)).fetchone():return web.json_response({"error":"Сначала получи вопрос"},status=400)
-  if c.execute("SELECT 1 FROM quiz_results WHERE user_id=? AND q=?",(uid,i)).fetchone():return web.json_response({"error":"На этот вопрос уже отвечали"},status=400)
+  if c.execute("SELECT 1 FROM quiz_results WHERE user_id=? AND q=?",(uid,i)).fetchone() or c.execute("SELECT 1 FROM ledger WHERE user_id=? AND reason IN (?,?)",(uid,f"quiz-{i}",f"quiz-wrong-{i}")).fetchone():return web.json_response({"error":"На этот вопрос уже отвечали"},status=400)
   ok=choice==q["c"]
   c.execute("INSERT INTO quiz_results(user_id,q) VALUES(?,?)",(uid,i))
   if ok:
