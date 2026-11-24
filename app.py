@@ -4,7 +4,7 @@ from pathlib import Path
 from aiohttp import web
 from aiogram import Bot, Dispatcher
 from aiogram.filters import CommandStart
-from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton, WebAppInfo
+from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, WebAppInfo
 
 ROOT=Path(__file__).parent
 
@@ -134,7 +134,7 @@ async def main():
    try:ref=int(args[1][4:])
    except:pass
   new=register(m.from_user,ref)
-  kb=ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="🚀 Открыть NEON CLUB",web_app=WebAppInfo(url=WEBAPP_URL))]],resize_keyboard=True)
+  kb=InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="🚀 Открыть NEON CLUB",web_app=WebAppInfo(url=WEBAPP_URL))]])
   await m.answer(("✨ Добро пожаловать! +100 стартовых Звёзд." if new else "С возвращением!")+"\nЭто внутренняя игровая валюта, не Telegram Stars.",reply_markup=kb)
  app=web.Application()
  app.router.add_get("/",home);app.router.add_get("/api/me",me);app.router.add_get("/api/ref",referral)
