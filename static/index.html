@@ -1,16 +1,66 @@
 <!doctype html>
-<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><meta name="theme-color" content="#17212b"><title>NEON CLUB</title><link rel="stylesheet" href="/static/style.css"><script src="https://telegram.org/js/telegram-web-app.js"></script></head>
-<body><main class="app">
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#17212b"><title>NEON CLUB</title>
+<link rel="stylesheet" href="/static/style.css?v=3">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+<main class="app">
 <header class="topbar"><div class="brand-mark">N<span>✦</span></div><div class="brand-copy"><span class="eyebrow">TELEGRAM MINI APP</span><h1>NEON CLUB</h1></div><span class="online"><i></i> В сети</span></header>
 <section class="balance-card"><div class="section-kicker">ТВОЙ БАЛАНС</div><div class="balance-line"><strong id="balance">—</strong><span>⭐</span></div><div class="welcome" id="hello">Привет!</div><div class="muted">Твои игровые звёзды NEON CLUB</div></section>
-<section class="profile-grid"><div class="profile-cell"><span>TELEGRAM ID</span><b id="uid">—</b></div><div class="profile-cell"><span>ПРИГЛАШЕНО ДРУЗЕЙ</span><b id="refs">—</b></div></section>
-<div class="section-heading"><h2>Игры и бонусы</h2><span>NEON CLUB</span></div><section class="action-grid"><button class="action-card" id="quizBtn"><span class="action-icon">🧠</span><b>Викторина</b><small>+5 ⭐ за верный ответ</small></button><button class="action-card" id="dailyBtn"><span class="action-icon">🎁</span><b>Ежедневный бонус</b><small>+10 ⭐ каждый день</small></button></section>
-<section class="panel" id="quizBox" hidden><div class="section-kicker">МИНИ-ИГРА</div><h3 id="question"></h3><div id="answers"></div><p id="result" class="muted"></p></section>
+
+<section class="tab-page" id="page-home">
+<div class="profile-grid"><div class="profile-cell"><span>TELEGRAM ID</span><b id="homeUid">—</b></div><div class="profile-cell"><span>ПРИГЛАШЕНО ДРУЗЕЙ</span><b id="homeRefs">—</b></div></div>
+<div class="section-heading"><h2>Быстрый старт</h2><span>NEON CLUB</span></div>
+<section class="action-grid">
+<button class="action-card" data-goto="games"><span class="action-icon">🎮</span><b>Открыть игры</b><small>Мини-игры и задания</small></button>
+<button class="action-card" id="homeDaily"><span class="action-icon">🎁</span><b>Ежедневный бонус</b><small>+10 ⭐ каждый день</small></button>
+</section>
 <section class="panel"><div class="panel-title"><span>🔗</span><h2>Пригласи друзей</h2></div><p class="muted">За каждого нового участника — +50 игровых звёзд.</p><div id="refLink" class="ref-link">Загружаем ссылку…</div><button class="button button-secondary" id="copy">Скопировать ссылку</button></section>
-<section class="panel"><div class="panel-title"><span>⭐</span><h2>Вывод звёзд</h2></div><p class="muted">Здесь будут отображаться условия и статус заявок. Сейчас функция находится в разработке.</p><button class="button" disabled>Скоро будет доступно</button></section>
-<section class="admin-panel" id="admin" hidden><div class="admin-head"><div><div class="section-kicker">УПРАВЛЕНИЕ</div><h2>Админ-панель</h2></div><span class="admin-tag">ADMIN</span></div>
+<section class="panel"><div class="panel-title"><span>✨</span><h2>Добро пожаловать в NEON CLUB</h2></div><p class="muted">Играй, выполняй задания и собирай внутренние игровые звёзды. Это не Telegram Stars и не реальные деньги.</p></section>
+</section>
+
+<section class="tab-page" id="page-games" hidden>
+<div class="section-heading"><h2>Игры и бонусы</h2><span>ИГРАЙ И ЗАРАБАТЫВАЙ</span></div>
+<section class="action-grid">
+<button class="action-card" id="quizBtn"><span class="action-icon">🧠</span><b>Викторина</b><small>+5 ⭐ за верный ответ</small></button>
+<button class="action-card" id="dailyBtn"><span class="action-icon">🎁</span><b>Ежедневный бонус</b><small>+10 ⭐ каждый день</small></button>
+<div class="action-card game-soon"><span class="action-icon">🧩</span><b>Игра на память</b><small>Скоро появится</small></div>
+<div class="action-card game-soon"><span class="action-icon">⚡</span><b>Испытание реакции</b><small>Скоро появится</small></div>
+</section>
+<section class="panel" id="quizBox" hidden><div class="section-kicker">МИНИ-ИГРА</div><h3 id="question"></h3><div id="answers"></div><p id="result" class="muted"></p></section>
+</section>
+
+<section class="tab-page" id="page-profile" hidden>
+<section class="profile-hero">
+<div class="avatar-wrap"><img id="avatar" alt="Аватар профиля" hidden><div id="avatarFallback" class="avatar-fallback">👤</div></div>
+<div class="profile-identity"><h2 id="profileName">Игрок NEON CLUB</h2><p id="profileUsername" class="muted">@username</p><span class="profile-chip">Участник NEON CLUB</span></div>
+</section>
+<div class="profile-stats">
+<div class="profile-cell"><span>TELEGRAM ID</span><b id="profileUid">—</b></div>
+<div class="profile-cell"><span>БАЛАНС</span><b id="profileBalance">— ⭐</b></div>
+<div class="profile-cell"><span>ПРИГЛАШЕНО</span><b id="profileRefs">—</b></div>
+<div class="profile-cell"><span>СТАТУС</span><b id="profileStatus">Игрок</b></div>
+</div>
+<section class="panel"><div class="panel-title"><span>⭐</span><h2>Вывод звёзд</h2></div><p class="muted">Функция заявок пока в разработке. Звёзды NEON CLUB — внутренняя игровая валюта, не деньги и не Telegram Stars.</p><button class="button" disabled>Скоро будет доступно</button></section>
+<section class="admin-panel" id="admin" hidden>
+<div class="admin-head"><div><div class="section-kicker">УПРАВЛЕНИЕ</div><h2>Админ-панель</h2></div><span class="admin-tag">ADMIN</span></div>
 <div class="total-card"><span>Пользователей запустили бота</span><strong id="totalUsers">0</strong></div>
 <div class="admin-list-head"><b>Последние пользователи</b><button class="text-button" id="refreshUsers">Обновить</button></div>
 <input id="userSearch" class="field" placeholder="Поиск по имени или Telegram ID"><div id="users" class="user-list"></div>
-<div class="grant-title">Выдать игровые звёзды</div><input id="target" class="field" placeholder="Telegram ID" inputmode="numeric"><input id="amount" class="field" placeholder="Количество звёзд" inputmode="numeric"><button class="button" id="change">Начислить звёзды</button><p class="muted admin-note">Начисления доступны только администраторам.</p></section>
-<footer>NEON CLUB · ВНУТРЕННЯЯ ИГРОВАЯ ВАЛЮТА</footer></main><div id="toast" role="status"></div><script src="/static/app.js"></script></body></html>
+<div class="grant-title">Выдать игровые звёзды</div><input id="target" class="field" placeholder="Telegram ID" inputmode="numeric"><input id="amount" class="field" placeholder="Количество звёзд" inputmode="numeric"><button class="button" id="change">Начислить звёзды</button><p class="muted admin-note">Начисления доступны только администраторам.</p>
+</section>
+</section>
+
+<nav class="bottom-nav" aria-label="Навигация">
+<button class="nav-item active" data-tab="home"><span>⌂</span><small>Главная</small></button>
+<button class="nav-item" data-tab="games"><span>🎮</span><small>Игры</small></button>
+<button class="nav-item" data-tab="profile"><span>◉</span><small>Профиль</small></button>
+</nav>
+<footer>NEON CLUB · ВНУТРЕННЯЯ ИГРОВАЯ ВАЛЮТА</footer>
+</main>
+<div id="toast" role="status"></div>
+<script src="/static/app.js?v=3"></script>
+</body></html>
