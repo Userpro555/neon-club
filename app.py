@@ -31,6 +31,8 @@ def init():
   c.execute("CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY, username TEXT, name TEXT, balance INTEGER DEFAULT 0, ref INTEGER, joined TEXT, daily TEXT DEFAULT '')")
   c.execute("CREATE TABLE IF NOT EXISTS ledger(id INTEGER PRIMARY KEY,user_id INTEGER,amount INTEGER,reason TEXT,created TEXT)")
   c.execute("CREATE TABLE IF NOT EXISTS quiz(user_id INTEGER,q INTEGER,PRIMARY KEY(user_id,q))")
+  c.execute("CREATE TABLE IF NOT EXISTS quiz_results(user_id INTEGER,q INTEGER,PRIMARY KEY(user_id,q))")
+  c.execute("CREATE TABLE IF NOT EXISTS game_rewards(user_id INTEGER,game TEXT,day TEXT,PRIMARY KEY(user_id,game,day))")
 def credit(c,uid,n,reason):
  c.execute("UPDATE users SET balance=balance+? WHERE id=?",(n,uid))
  c.execute("INSERT INTO ledger(user_id,amount,reason,created) VALUES(?,?,?,?)",(uid,n,reason,stamp()))
@@ -101,10 +103,31 @@ async def answer(r):
  except Exception:return web.json_response({"error":"Некорректный ответ"},status=400)
  with db() as c:
   if not c.execute("SELECT 1 FROM quiz WHERE user_id=? AND q=?",(uid,i)).fetchone():return web.json_response({"error":"Сначала получи вопрос"},status=400)
-  if c.execute("SELECT 1 FROM ledger WHERE user_id=? AND reason=?",(uid,f"quiz-{i}")).fetchone():return web.json_response({"error":"Награда уже получена"},status=400)
+  if c.execute("SELECT 1 FROM quiz_results WHERE user_id=? AND q=?",(uid,i)).fetchone():return web.json_response({"error":"На этот вопрос уже отвечали"},status=400)
   ok=choice==q["c"]
-  if ok:credit(c,uid,QUIZ_REWARD,f"quiz-{i}")
- return web.json_response({"correct":ok,"reward":QUIZ_REWARD if ok else 0})
+  c.execute("INSERT INTO quiz_results(user_id,q) VALUES(?,?)",(uid,i))
+  if ok:
+   credit(c,uid,QUIZ_REWARD,f"quiz-{i}")
+   delta=QUIZ_REWARD
+  else:
+   balance=c.execute("SELECT balance FROM users WHERE id=?",(uid,)).fetchone()["balance"]
+   delta=-min(10,balance)
+   if delta:credit(c,uid,delta,f"quiz-wrong-{i}")
+ return web.json_response({"correct":ok,"reward":delta,"balance_delta":delta})
+
+async def game_reward(r):
+ u=auth(r)
+ if not u:return denied()
+ try:
+  b=await r.json();game=str(b.get("game",""))
+  if game not in ("memory","reaction"):raise ValueError()
+ except Exception:return web.json_response({"error":"Некорректная игра"},status=400)
+ uid=int(u["id"]);today=date.today().isoformat()
+ with db() as c:
+  try:c.execute("INSERT INTO game_rewards(user_id,game,day) VALUES(?,?,?)",(uid,game,today))
+  except sqlite3.IntegrityError:return web.json_response({"error":"Награда за эту игру сегодня уже получена"},status=400)
+  credit(c,uid,3,"Игра: "+game)
+ return web.json_response({"reward":3})
 async def admin_users(r):
  u=auth(r)
  if not u or int(u["id"]) not in ADMIN_IDS:return web.json_response({"error":"Доступ запрещён"},status=403)
@@ -137,7 +160,7 @@ async def main():
   await m.answer(("✨ Добро пожаловать в NEON CLUB!" if new else "С возвращением!")+"\nЭто внутренняя игровая валюта, не Telegram Stars.",reply_markup=kb)
  app=web.Application()
  app.router.add_get("/",home);app.router.add_get("/api/me",me);app.router.add_get("/api/ref",referral)
- app.router.add_post("/api/daily",daily);app.router.add_get("/api/quiz",quiz);app.router.add_post("/api/answer",answer)
+ app.router.add_post("/api/daily",daily);app.router.add_get("/api/quiz",quiz);app.router.add_post("/api/answer",answer);app.router.add_post("/api/game/reward",game_reward)
  app.router.add_get("/api/admin/users",admin_users);app.router.add_post("/api/admin/adjust",adjust)
  app.router.add_static("/static/",ROOT/"static")
  runner=web.AppRunner(app);await runner.setup();await web.TCPSite(runner,"0.0.0.0",PORT).start()
