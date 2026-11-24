@@ -43,3 +43,11 @@ footer{text-align:center;color:var(--muted);font-size:9px;letter-spacing:.5px;pa
 .action-card{transition:transform .16s ease,border-color .16s ease;border:1px solid var(--line)}
 .action-card:active,.nav-item:active{transform:scale(.98)}
 .section-heading{margin-top:8px}
+
+.header-balance{margin-left:auto;display:flex;align-items:center;gap:5px;padding:7px 10px;border-radius:18px;background:color-mix(in srgb,var(--accent) 20%,var(--panel));border:1px solid color-mix(in srgb,var(--accent) 45%,transparent);font-size:12px;font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap;order:1}
+.top-profile{margin-left:0!important;order:2}.topbar .online{order:3;margin-left:0}
+.balance-card{padding:15px 18px;margin-bottom:14px}
+.memory-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.memory-card{min-height:68px;border:1px solid var(--line);border-radius:13px;background:var(--bg);color:var(--text);font-size:25px;font-weight:800}
+.memory-card.revealed{background:color-mix(in srgb,var(--accent) 25%,var(--panel));border-color:var(--accent)}
+.reaction-go{background:#159b68!important;color:white!important}
