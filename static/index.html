@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#17212b"><title>NEON CLUB</title>
-<link rel="stylesheet" href="/static/style.css?v=3">
+<link rel="stylesheet" href="/static/style.css?v=4">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
@@ -35,7 +35,7 @@
 
 <section class="tab-page" id="page-profile" hidden>
 <section class="profile-hero">
-<div class="avatar-wrap"><img id="avatar" alt="Аватар профиля" hidden><div id="avatarFallback" class="avatar-fallback">👤</div></div>
+<div class="profile-avatar-column"><div class="avatar-wrap"><img id="avatar" alt="Аватар профиля" hidden><div id="avatarFallback" class="avatar-fallback">👤</div></div><div class="avatar-stars"><span>⭐</span><b id="avatarBalance">—</b></div></div>
 <div class="profile-identity"><h2 id="profileName">Игрок NEON CLUB</h2><p id="profileUsername" class="muted">@username</p><span class="profile-chip">Участник NEON CLUB</span></div>
 </section>
 <div class="profile-stats">
@@ -50,7 +50,7 @@
 <div class="total-card"><span>Пользователей запустили бота</span><strong id="totalUsers">0</strong></div>
 <div class="admin-list-head"><b>Последние пользователи</b><button class="text-button" id="refreshUsers">Обновить</button></div>
 <input id="userSearch" class="field" placeholder="Поиск по имени или Telegram ID"><div id="users" class="user-list"></div>
-<div class="grant-title">Выдать игровые звёзды</div><input id="target" class="field" placeholder="Telegram ID" inputmode="numeric"><input id="amount" class="field" placeholder="Количество звёзд" inputmode="numeric"><button class="button" id="change">Начислить звёзды</button><p class="muted admin-note">Начисления доступны только администраторам.</p>
+<div class="grant-title">Управление балансом</div><p class="muted admin-note">Положительное число — начислить. Отрицательное — списать. Например: +50 или -20.</p><input id="target" class="field" placeholder="Telegram ID пользователя" inputmode="numeric"><input id="amount" class="field" placeholder="Сумма звёзд: +50 или -20" inputmode="numeric"><button class="button" id="change">Применить изменение</button><p id="adjustHint" class="muted admin-note">Списание не может сделать баланс меньше нуля.</p>
 </section>
 </section>
 
@@ -62,5 +62,5 @@
 <footer>NEON CLUB · ВНУТРЕННЯЯ ИГРОВАЯ ВАЛЮТА</footer>
 </main>
 <div id="toast" role="status"></div>
-<script src="/static/app.js?v=3"></script>
+<script src="/static/app.js?v=4"></script>
 </body></html>
