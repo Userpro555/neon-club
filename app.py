@@ -16,7 +16,7 @@ ADMIN_IDS = {
 }  # замени на свой Telegram ID
 PORT=int(os.getenv("PORT", "8080"))
 DB=str(ROOT/"neon_club.sqlite3")
-START_BONUS, REF_BONUS, DAILY_BONUS, QUIZ_REWARD=100,50,10,5
+REF_BONUS, DAILY_BONUS, QUIZ_REWARD=50,10,5
 QUESTIONS=[
  {"q":"Сколько будет 7 × 8?","a":["54","56","64"],"c":1},
  {"q":"Какая планета Красная планета?","a":["Венера","Марс","Юпитер"],"c":1},
@@ -41,7 +41,6 @@ def register(u,ref=None):
    c.execute("UPDATE users SET username=?,name=? WHERE id=?",(u.username or "",u.first_name or "",uid)); return False
   valid=ref if ref and ref!=uid and c.execute("SELECT id FROM users WHERE id=?",(ref,)).fetchone() else None
   c.execute("INSERT INTO users(id,username,name,balance,ref,joined) VALUES(?,?,?,?,?,?)",(uid,u.username or "",u.first_name or "",0,valid,stamp()))
-  credit(c,uid,START_BONUS,"Стартовый бонус")
   if valid: credit(c,valid,REF_BONUS,"Реферал")
   return True
 def auth(req):
@@ -135,7 +134,7 @@ async def main():
    except:pass
   new=register(m.from_user,ref)
   kb=InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="🚀 Открыть NEON CLUB",web_app=WebAppInfo(url=WEBAPP_URL))]])
-  await m.answer(("✨ Добро пожаловать! +100 стартовых Звёзд." if new else "С возвращением!")+"\nЭто внутренняя игровая валюта, не Telegram Stars.",reply_markup=kb)
+  await m.answer(("✨ Добро пожаловать в NEON CLUB!" if new else "С возвращением!")+"\nЭто внутренняя игровая валюта, не Telegram Stars.",reply_markup=kb)
  app=web.Application()
  app.router.add_get("/",home);app.router.add_get("/api/me",me);app.router.add_get("/api/ref",referral)
  app.router.add_post("/api/daily",daily);app.router.add_get("/api/quiz",quiz);app.router.add_post("/api/answer",answer)
